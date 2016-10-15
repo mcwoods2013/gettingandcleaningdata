@@ -46,3 +46,20 @@ names(mdata) <- (c("subject","activity",
                   as.character(flabels[indx_mean,2]),
                   as.character(flabels[indx_std,2]),
                   "datause"))
+#Replace the "-" character by "_"
+names(mdata) <- gsub("-","_",names(mdata))
+names(mdata) <- gsub("()",'',names(mdata),fixed=TRUE)
+
+#Set the activity labels based on alabels
+mdata$activity <- alabels$V2[mdata$activity]
+
+################################################
+#Part 4: Create independent table
+#Load dplyr library
+library(dplyr)
+#Group by subject and activity
+gmdata <- group_by(mdata,subject,activity)
+#Summarize the means by group
+smdata <- summarize_each(gmdata,funs(mean))
+
+#mdata and smdata are the complete and summary outputs
